@@ -4,8 +4,8 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract Allowance {
     /*
-    in solidity 0.8.00 overflow and underflow has been addressed by solidity compiler
-    hence, using safemath library is not necessary if the contract is compiled using solidity version 0.8.00 or later
+    Overflow and underflow has been addressed by solidity compiler 0.8.00.
+    hence, using safemath library is not necessary if the contract is compiled using solidity version 0.8.00 or later.
     */
     using SafeMath for uint;
     
