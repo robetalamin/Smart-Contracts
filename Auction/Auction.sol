@@ -40,10 +40,10 @@ contract Auction{
         auctionState = State.Running;
         
         startBlock = block.number;
-        endBlock = startBlock + 3;
+        endBlock = startBlock + 3; //you can change endblock to real life time duration converted to no of block
       
         ipfsHash = "";
-        bidIncrement = 1000000000000000000;
+        bidIncrement = 1 ether;
     }
     
     // declaring function modifiers
