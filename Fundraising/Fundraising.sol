@@ -23,13 +23,17 @@ contract FundRaising{
         mapping(address => bool) voters;
     }
     
-      //dynamic array of requests
-    // Request[] public requests;
     uint index;
     mapping(uint=>Request) requests;
+    
+    event contributeEvent(address sender, uint value);
+    event createRequestEvent(string _description, address _recipient, uint _value);
+    event makePaymentEvent(address recipient, uint value);
+    event refundEvent(address _recipient, uint _value);
+    event voteRequestEvent(uint _index, address _voter);
 
     
-    constructor(uint _goal, uint _deadline) public{
+    constructor(uint _goal, uint _deadline) {
         goal = _goal;
         deadline = block.timestamp + _deadline;
         
@@ -56,6 +60,8 @@ contract FundRaising{
         contributors[msg.sender] += msg.value;
         raisedAmount += msg.value;
         
+        emit contributeEvent(msg.sender, msg.value);
+        
     }
     
     function getBalance() public view returns(uint){
@@ -74,6 +80,7 @@ contract FundRaising{
         recipient.transfer(value);
         contributors[msg.sender] = 0;
         
+        emit refundEvent(msg.sender, value);
         
     }
     
@@ -87,19 +94,9 @@ contract FundRaising{
         newRequest.completed = false;
         newRequest.noOfVoters = 0;
         
-        /*Request({
-           description: _description,
-           recipient: _recipient,
-           value: _value,
-           completed: false,
-           noOfVoters: 0
-        
-            
-        }
-           );
-    
-        requests.push(newRequest); */
         index++;
+        
+        emit createRequestEvent (_description, _recipient, _value);
     }
     
     
@@ -115,6 +112,8 @@ contract FundRaising{
       thisRequest.voters[msg.sender] = true;
       thisRequest.noOfVoters++;
       
+      emit voteRequestEvent(_index, msg.sender);
+      
   }
     
     //if voted, owner sends money to the recipient (vendor, seller)
@@ -126,6 +125,8 @@ contract FundRaising{
         thisRequest.recipient.transfer(thisRequest.value); //trasfer the money to the recipient
         
         thisRequest.completed = true;
+        emit makePaymentEvent(thisRequest.recipient, thisRequest.value);
     }
     
 }
+
